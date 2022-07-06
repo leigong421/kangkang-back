@@ -17,6 +17,8 @@ module.exports = (app) => {
       goodsPrice: DECIMAL(19, 4),
       goodsUnit: STRING(50),
       goodsTotal: DECIMAL(19, 4),
+      goodsTotal: DECIMAL(19, 4),
+      saleDate: STRING(50),
     },
     {
       freezeTableName: true,

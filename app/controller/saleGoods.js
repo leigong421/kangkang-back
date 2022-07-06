@@ -2,21 +2,55 @@
 // 处理和数据库的请求,返回对应的数据,先获取model某块下对应的数据,然后返回给页面
 
 const Controller = require("egg").Controller;
-
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 class saleGoodsController extends Controller {
   // 查询列表
   async index() {
     const { ctx } = this;
     // 获取get请求的数据,通过query的方式获取数据
-    const { page = 1, size = 20 } = ctx.query;
+    const {
+      page = 1,
+      size = 20,
+      companyName = "",
+      goodsName = "",
+      saleDate = "",
+    } = ctx.query;
     let goodsObj;
     if (page || size) {
       // 分页查询
       goodsObj = await ctx.model.SaleGoods.findAndCountAll({
         offset: parseInt((page - 1) * size),
         limit: parseInt(size),
-
         distinct: true,
+        where: {
+          [Op.or]: [
+            {
+              companyName: {
+                [Op.like]: `%${companyName}%`,
+              },
+            },
+            {
+              goodsName: {
+                [Op.like]: `%${goodsName}%`,
+              },
+            },
+            {
+              saleDate: {
+                [Op.in]: saleDate,
+              },
+            },
+          ],
+          // companyName: {
+          //   [Op.like]: `%${companyName}%`,
+          // },
+          // goodsName: {
+          //   [Op.like]: `%${goodsName}%`,
+          // },
+          // saleDate: {
+          //   [Op.in]: saleDate,
+          // },
+        },
       });
     } else {
       // 查询所有
@@ -41,7 +75,7 @@ class saleGoodsController extends Controller {
     const { goodsList } = ctx.request.body;
 
     const res = await ctx.model.SaleGoods.bulkCreate(goodsList);
-    console.log(3333, ctx.request.body,res);
+    console.log(3333, ctx.request.body, res);
     // const haveData = await ctx.model.SaleGoods.findAll({ where: { name } });
     // if (haveData && haveData.length) {
     //   ctx.status = 200;

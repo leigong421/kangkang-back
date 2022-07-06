@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = (app) => {
-  const { STRING, INTEGER, TEXT, } = app.Sequelize;
+  const { STRING, INTEGER, TEXT } = app.Sequelize;
 
   const CompanyNews = app.model.define(
     "company_news",
@@ -18,8 +18,10 @@ module.exports = (app) => {
       type: INTEGER,
     },
     {
-      freezeTableName: true,
-      timestamps: false,
+      freezeTableName: true, //强制生成表明不加s
+      timestamps: true,
+      createdAt: true, //数据创建时间  模型希望你有该字段
+      updatedAt: true, //数据更新时间
     }
   );
 
