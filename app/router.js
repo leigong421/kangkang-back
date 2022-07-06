@@ -18,6 +18,8 @@ module.exports = (app) => {
 
   router.get("/api/goods/getList", controller.goodsName.index);
   router.get("/api/companys/getList", controller.companys.index);
+  router.get("/api/saleGoods/getList", controller.saleGoods.index);
+  router.post("/api/saleGoods/add", controller.saleGoods.create);
 
   // router.post("/api/moduleThree/addUsers", controller.emperors.create);
 
